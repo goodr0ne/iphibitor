@@ -3,7 +3,6 @@ package goodr0ne.iphibitor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +33,7 @@ public class IphibitorController {
     String ip = IphibitorWebUtils.getClientIpAddress(request);
     for (int i = 0; i < reqNumber; i++) {
       strategyFactory.getStrategy(Iphibitionable.class,
-              IphibitorStrategyUser.IPHIBITOR_CONTROLLER).inhibit(ip);
+              IphibitorStrategyUser.IPHIBITOR_CONCURRENT_CONTROLLER).inhibit(ip);
     }
     return "Produce inhibition, quantity - " + reqNumber + ", from ip address - " + ip;
   }
