@@ -2,6 +2,7 @@ package goodr0ne.iphibitor;
 
 import java.util.ArrayList;
 
+@IphibitorStrategy(type=Iphibitionable.class, users={IphibitorStrategyUser.IPHIBITOR_CONTROLLER})
 class AlwaysCheckingIphibitor implements Iphibitionable {
   private static final int REQUEST_LIMIT = 50;
   private static ArrayList<IphibitorRequestEntry> entries;
@@ -9,7 +10,6 @@ class AlwaysCheckingIphibitor implements Iphibitionable {
   AlwaysCheckingIphibitor() {
     entries = new ArrayList<>();
   }
-
 
   public synchronized void inhibit() throws IphibitorRequestLimitReachedException {
     if (entries.isEmpty()) {
