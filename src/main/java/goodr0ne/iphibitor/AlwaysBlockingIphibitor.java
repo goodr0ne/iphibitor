@@ -1,8 +1,8 @@
 package goodr0ne.iphibitor;
 
-class AlwaysBlockingIphibitor {
+class AlwaysBlockingIphibitor implements Iphibitionable {
 
-  void inhibit() throws IphibitorRequestLimitReachedException {
+  public void inhibit() throws IphibitorRequestLimitReachedException {
     throw new IphibitorRequestLimitReachedException();
   }
 }
