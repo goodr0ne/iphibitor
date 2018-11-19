@@ -18,11 +18,12 @@ public class IphibitorController {
 
   @RequestMapping(value = {"/inhibit/{reqNumber}"}, method = GET)
   public String inhibitRequest(@PathVariable int reqNumber) {
+    new AlwaysBlockingIphibitor().inhibit();
     return "Produce inhibition, quantity - " + reqNumber + "...";
   }
 
   @RequestMapping(value = {"/inhibit"}, method = GET)
   public String inhibitRequest() {
-    return "Produce inhibition, single mode...";
+    return "blank string";
   }
 }
