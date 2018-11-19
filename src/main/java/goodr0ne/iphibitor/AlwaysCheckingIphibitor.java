@@ -2,7 +2,8 @@ package goodr0ne.iphibitor;
 
 import java.util.ArrayList;
 
-@IphibitorStrategy(type=Iphibitionable.class, users={IphibitorStrategyUser.IPHIBITOR_CONTROLLER})
+@IphibitorStrategy(type=Iphibitionable.class,
+        users={IphibitorStrategyUser.IPHIBITOR_CONTROLLER})
 class AlwaysCheckingIphibitor implements Iphibitionable {
   private static final int REQUEST_LIMIT = 50;
   private static ArrayList<IphibitorRequestEntry> entries;
@@ -11,9 +12,9 @@ class AlwaysCheckingIphibitor implements Iphibitionable {
     entries = new ArrayList<>();
   }
 
-  public synchronized void inhibit() throws IphibitorRequestLimitReachedException {
+  public synchronized void inhibit(String ip) throws IphibitorRequestLimitReachedException {
     if (entries.isEmpty()) {
-      entries.add(new IphibitorRequestEntry());
+      entries.add(new IphibitorRequestEntry(ip));
       return;
     }
     ArrayList<IphibitorRequestEntry> toDeleteEntries = new ArrayList<>();
@@ -22,13 +23,16 @@ class AlwaysCheckingIphibitor implements Iphibitionable {
       if (entry.isOld()) {
         toDeleteEntries.add(entry);
       } else {
-        requestCount++;
+        if (entry.isMatched(ip)) {
+          requestCount++;
+          if (requestCount > REQUEST_LIMIT) {
+            entries.removeAll(toDeleteEntries);
+            throw new IphibitorRequestLimitReachedException();
+          }
+        }
       }
     }
     entries.removeAll(toDeleteEntries);
-    entries.add(new IphibitorRequestEntry());
-    if (requestCount > REQUEST_LIMIT) {
-      throw new IphibitorRequestLimitReachedException();
-    }
+    entries.add(new IphibitorRequestEntry(ip));
   }
 }

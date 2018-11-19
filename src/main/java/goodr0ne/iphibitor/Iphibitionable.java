@@ -1,5 +1,5 @@
 package goodr0ne.iphibitor;
 
 public interface Iphibitionable {
-  void inhibit() throws IphibitorRequestLimitReachedException;
+  void inhibit(String ip) throws IphibitorRequestLimitReachedException;
 }
